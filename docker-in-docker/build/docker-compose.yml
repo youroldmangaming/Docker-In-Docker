@@ -1,0 +1,16 @@
+services:
+  docker-in-docker:
+    build: .
+    image: docker-dind
+    container_name: docker-dind
+    privileged: true
+    volumes:
+      - docker-storage:/var/lib/docker
+    environment:
+      - DOCKER_TLS_CERTDIR=
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+
+volumes:
+  docker-storage:
