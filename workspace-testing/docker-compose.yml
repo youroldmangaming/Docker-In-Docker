@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  docker-in-docker:
+    build: .
+    image: docker-dind-full
+    container_name: testing
+    privileged: true
+volumes:
+  testing-storage:
+      - testing-storage:/var/lib/docker
+      - ./docker-certs:/certs
+      - ./workspace-testing:/workspace
+    ports:
+      - "2345:2375"
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+      DOCKER_HOST: unix:///var/run/docker.sock
+    healthcheck:
+      test: docker info
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+volumes:
+  testing-storage:
